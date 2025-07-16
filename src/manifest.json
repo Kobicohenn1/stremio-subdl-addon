@@ -1,0 +1,13 @@
+{
+  "id": "org.kobi.subdl",
+  "version": "1.0.0",
+  "name": "SubDL Hebrew Subtitles by kobi",
+  "description": "Fetch Hebrew subtitles from SubDL API by kobi",
+  "types": ["movie", "series"],
+  "catalogs": [],
+  "resources": ["subtitles"],
+  "idPrefixes": ["tt"],
+  "behaviorHints": {
+    "configurationRequired": false
+  }
+}
