@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 7000;
 const router = getRouter(addonInterface);
 
 app.use('/stremio-subdl-addon', router);
-
 /**
  * Starts the Express server and listens for Stremio requests.
  */

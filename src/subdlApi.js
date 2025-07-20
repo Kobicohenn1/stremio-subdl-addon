@@ -16,28 +16,42 @@ const API_KEY = process.env.SUBDL_API_KEY;
  *  - title: string (optional release name)
  */
 
-async function fetchSubtitles(imdbId) {
+async function fetchSubtitles(imdbId, type, season, episode) {
   try {
+    const params = {
+      api_key: API_KEY,
+      imdb_id: imdbId,
+      languages: 'HE',
+      type: type,
+    };
+    if (season && episode) {
+      params.season_number = season;
+      params.episode_number = episode;
+    }
     const response = await axios.get('https://api.subdl.com/api/v1/subtitles', {
-      params: {
-        api_key: API_KEY,
-        imdb_id: imdbId,
-        languages: 'HE',
-        type: 'movie',
-      },
+      params,
     });
     const { subtitles } = response.data;
-    const formattedSubtitles = subtitles.map((sub, index) => ({
+    const filtered =
+      season && episode
+        ? subtitles.filter(
+            (sub) => sub.season == season && sub.episode == episode
+          )
+        : subtitles;
+    const formattedSubtitles = filtered.map((sub, index) => ({
       id: `subdl-${index}`,
       lang: 'Hebrew',
       langShort: 'he',
       url: `https://dl.subdl.com${sub.url}`,
       title: `SubDL - ${sub.release_name || 'Hebrew Subtitles'}`,
     }));
-    console.log('API subtitles:', subtitles);
+    console.log(
+      '[SubDL Addon] Final subtitles array to return:',
+      formattedSubtitles
+    );
     return formattedSubtitles;
   } catch (err) {
-    console.error('SubDL API Error:', err.message);
+    console.error(`SubDL API Error:${type}`, err.message);
     return [];
   }
 }
